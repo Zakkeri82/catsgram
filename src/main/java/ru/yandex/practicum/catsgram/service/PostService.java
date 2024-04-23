@@ -20,6 +20,14 @@ public class PostService {
         return posts.values();
     }
 
+    public Post findPostId(String id) {
+        long actId = Long.parseLong(id);
+        return posts.values().stream()
+                .filter(p -> p.getId().equals(actId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(String.format("Пост № %d не найден", actId)));
+    }
+
     public Post create(Post post) {
         if (post.getDescription() == null || post.getDescription().isBlank()) {
             throw new ConditionsNotMetException("Описание не может быть пустым");
