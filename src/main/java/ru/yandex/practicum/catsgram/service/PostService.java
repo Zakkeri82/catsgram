@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 // Указываем, что класс PostService - является бином и его
@@ -29,12 +30,11 @@ public class PostService {
                 }).skip(from).limit(size).collect(Collectors.toList());
     }
 
-    public Post findPostId(String id) {
-        long actId = Long.parseLong(id);
+    public Post findPostId(Long id) {
         return posts.values().stream()
-                .filter(p -> p.getId().equals(actId))
+                .filter(p -> Objects.equals(p.getId(), id))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException(String.format("Пост № %d не найден", actId)));
+                .orElseThrow(() -> new NotFoundException(String.format("Пост № %d не найден", id)));
     }
 
     public Post create(Post post) {
