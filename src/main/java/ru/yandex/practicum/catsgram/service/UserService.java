@@ -28,6 +28,7 @@ public class UserService {
             throw new ConditionsNotMetException("Имейл должен быть указан");
         }
 
+
         Optional<User> alreadyExistUser = userRepository.findByEmail(request.getEmail());
         if (alreadyExistUser.isPresent()) {
             throw new DuplicatedDataException("Данный имейл уже используется");

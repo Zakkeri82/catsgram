@@ -1,43 +1,33 @@
 package ru.yandex.practicum.catsgram.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.catsgram.model.Post;
+import ru.yandex.practicum.catsgram.dto.NewPostRequest;
+import ru.yandex.practicum.catsgram.dto.PostDto;
+import ru.yandex.practicum.catsgram.dto.UpdatePostRequest;
 import ru.yandex.practicum.catsgram.service.PostService;
 
-import java.util.Collection;
-
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
 
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
-
-    @GetMapping
-    public Collection<Post> findAll(
-            @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "desc") String sort
-    ) {
-        return postService.findAll(from, size, sort);
-    }
-
-    @GetMapping("/{id}")
-    public Post findPostId(@PathVariable long id) {
-        return postService.findPostId(id);
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Post create(@RequestBody Post post) {
-        return postService.create(post);
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostDto createPost(@RequestBody NewPostRequest post) {
+        return postService.createPost(post);
     }
 
-    @PutMapping
-    public Post update(@RequestBody Post newPost) {
-        return postService.update(newPost);
+    @GetMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public PostDto getPostById(@PathVariable("postId") long postId) {
+        return postService.getPostById(postId);
+    }
+
+    @PutMapping("/{postId}")
+    public PostDto updatePost(@PathVariable("postId") long postId, @RequestBody UpdatePostRequest post) {
+        return postService.updatePost(postId, post);
     }
 }
